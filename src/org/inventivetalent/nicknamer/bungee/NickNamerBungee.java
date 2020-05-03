@@ -3,20 +3,18 @@ package org.inventivetalent.nicknamer.bungee;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import net.md_5.bungee.ServerConnection;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.Connection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.event.ServerConnectEvent;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.event.EventHandler;
-import org.inventivetalent.update.bungee.BungeeUpdater;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,12 +29,6 @@ public class NickNamerBungee extends Plugin implements Listener {
 	public void onEnable() {
 		ProxyServer.getInstance().registerChannel("nicknamer:main");
 		ProxyServer.getInstance().getPluginManager().registerListener(this, this);
-
-		try {
-			BungeeUpdater updater = new BungeeUpdater(this, 8964);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@EventHandler
@@ -59,7 +51,7 @@ public class NickNamerBungee extends Plugin implements Listener {
 			}
 
 			if (data.size() < 3) {
-				getLogger().warning("Received message with invalid content length (" + data.size() + " < 3, " + data.toString() + ")");
+				System.err.println("Received message with invalid content length (" + data.size() + " < 3, " + data.toString() + ")");
 				return;
 			}
 
@@ -69,8 +61,8 @@ public class NickNamerBungee extends Plugin implements Listener {
 				String skinString = data.get(3);
 				String dataString = data.get(4);
 
-				if (e.getSender() instanceof ServerConnection) {
-					shutdownData.put(((ServerConnection) e.getSender()).getAddress(), new String[] {
+				if (e.getSender() instanceof Server) {
+					shutdownData.put(((Server) e.getSender()).getAddress(), new String[] {
 							nameString,
 							skinString,
 							dataString });//Store the data
@@ -84,7 +76,7 @@ public class NickNamerBungee extends Plugin implements Listener {
 				ProxiedPlayer player = ((ProxiedPlayer) receiver);
 				for (ServerInfo server : ProxyServer.getInstance().getServers().values()) {
 					if (!server.getPlayers().contains(player)) {
-						server.sendData("nicknamer:main", out.toByteArray(), true);
+						server.sendData("nicknamer:main", out.toByteArray());
 					}
 				}
 			}
@@ -109,7 +101,7 @@ public class NickNamerBungee extends Plugin implements Listener {
 					out.writeUTF(split1[0]);
 					out.writeUTF(split1[1]);
 
-					e.getTarget().sendData("nicknamer:main", out.toByteArray(), true);
+					e.getTarget().sendData("nicknamer:main", out.toByteArray());
 				}
 			}
 		}
@@ -134,7 +126,7 @@ public class NickNamerBungee extends Plugin implements Listener {
 					out.writeUTF(split1[0]);
 					out.writeUTF(split1[1]);
 
-					e.getServer().getInfo().sendData("nicknamer:main", out.toByteArray(), true);
+					e.getServer().getInfo().sendData("nicknamer:main", out.toByteArray());
 				}
 			}
 			if (!skinString.isEmpty()) {
@@ -146,7 +138,7 @@ public class NickNamerBungee extends Plugin implements Listener {
 					out.writeUTF(split1[0]);
 					out.writeUTF(split1[1]);
 
-					e.getServer().getInfo().sendData("nicknamer:main", out.toByteArray(), true);
+					e.getServer().getInfo().sendData("nicknamer:main", out.toByteArray());
 				}
 			}
 		}
