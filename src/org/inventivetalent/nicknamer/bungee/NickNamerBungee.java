@@ -29,7 +29,7 @@ public class NickNamerBungee extends Plugin implements Listener {
 
 	@Override
 	public void onEnable() {
-		ProxyServer.getInstance().registerChannel("NickNamer");
+		ProxyServer.getInstance().registerChannel("nicknamer:main");
 		ProxyServer.getInstance().getPluginManager().registerListener(this, this);
 
 		try {
@@ -41,7 +41,7 @@ public class NickNamerBungee extends Plugin implements Listener {
 
 	@EventHandler
 	public void onPluginMessage(PluginMessageEvent e) {
-		if ("NickNamer".equals(e.getTag())) {
+		if ("nicknamer:main".equals(e.getTag())) {
 			ByteArrayDataInput in = ByteStreams.newDataInput(e.getData());
 			ByteArrayDataOutput out = ByteStreams.newDataOutput();
 
@@ -84,7 +84,7 @@ public class NickNamerBungee extends Plugin implements Listener {
 				ProxiedPlayer player = ((ProxiedPlayer) receiver);
 				for (ServerInfo server : ProxyServer.getInstance().getServers().values()) {
 					if (!server.getPlayers().contains(player)) {
-						server.sendData("NickNamer", out.toByteArray(), true);
+						server.sendData("nicknamer:main", out.toByteArray(), true);
 					}
 				}
 			}
@@ -109,7 +109,7 @@ public class NickNamerBungee extends Plugin implements Listener {
 					out.writeUTF(split1[0]);
 					out.writeUTF(split1[1]);
 
-					e.getTarget().sendData("NickNamer", out.toByteArray(), true);
+					e.getTarget().sendData("nicknamer:main", out.toByteArray(), true);
 				}
 			}
 		}
@@ -134,7 +134,7 @@ public class NickNamerBungee extends Plugin implements Listener {
 					out.writeUTF(split1[0]);
 					out.writeUTF(split1[1]);
 
-					e.getServer().getInfo().sendData("NickNamer", out.toByteArray(), true);
+					e.getServer().getInfo().sendData("nicknamer:main", out.toByteArray(), true);
 				}
 			}
 			if (!skinString.isEmpty()) {
@@ -146,7 +146,7 @@ public class NickNamerBungee extends Plugin implements Listener {
 					out.writeUTF(split1[0]);
 					out.writeUTF(split1[1]);
 
-					e.getServer().getInfo().sendData("NickNamer", out.toByteArray(), true);
+					e.getServer().getInfo().sendData("nicknamer:main", out.toByteArray(), true);
 				}
 			}
 		}
