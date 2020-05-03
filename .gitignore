@@ -1,0 +1,6 @@
+.git
+*.idea/
+*.iml
+*doc
+*/target
+*/dependency-reduced-pom.xml

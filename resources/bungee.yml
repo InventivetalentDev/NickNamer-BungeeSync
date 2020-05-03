@@ -1,0 +1,4 @@
+name: NickNamerBungee
+main: de.inventivegames.nickname.bungee.NickNamerBungee
+author: inventivetalent
+version: ${project.version}
