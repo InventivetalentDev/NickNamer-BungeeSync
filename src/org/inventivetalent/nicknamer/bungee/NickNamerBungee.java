@@ -1,4 +1,4 @@
-package de.inventivegames.nickname.bungee;
+package org.inventivetalent.nicknamer.bungee;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
